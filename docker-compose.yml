@@ -1,0 +1,24 @@
+volumes:
+  gorilla-huggingface:
+
+services:
+  gorilla:
+    runtime: nvidia
+    container_name: gorilla
+    image: gorilla
+    environment:
+      NVIDIA_VISIBLE_DEVICES: ALL
+      #MODEL: "gorilla-llm/gorilla-falcon-7b-hf-v0"
+      MODEL: "gorilla-llm/gorilla-openfunctions-v2"
+    restart: unless-stopped
+    ports:
+      - 5000:5000
+    volumes:
+      - gorilla-huggingface:/root/.cache/huggingface
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [gpu,video]
+              count: all
